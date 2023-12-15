@@ -3,3 +3,5 @@ openrc-*
 provider.tf
 .ssh/
 *.tf
+.terraform
+.terraform*
