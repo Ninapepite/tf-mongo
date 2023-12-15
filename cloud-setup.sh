@@ -17,15 +17,15 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo apt install -y nftables
 
 # Configuration de règles de base avec nftables
-sudo nft add table inet filter
-sudo nft add chain inet filter input { type filter hook input priority 0 \; }
-sudo nft add rule inet filter input iif lo accept
-sudo nft add rule inet filter input tcp dport { http, https } accept
+# sudo nft add table inet filter
+# sudo nft add chain inet filter input { type filter hook input priority 0 \; }
+# sudo nft add rule inet filter input iif lo accept
+# sudo nft add rule inet filter input tcp dport { http, https } accept
 # sudo nft add rule inet filter input tcp dport 22 ip saddr Your_IP_Public accept
 # sudo nft add rule inet filter input tcp dport 22 drop
 
 # Sauvegarde de la configuration de nftables
-sudo nft list ruleset > /etc/nftables.conf
+# sudo nft list ruleset > /etc/nftables.conf
 
 # Affichage des règles nftables
 sudo nft list ruleset
@@ -43,6 +43,8 @@ sudo mkdir -p /opt/crowdsec
 
 
 git clone https://github.com/aidalinfo/crowdsecurity-udpflood-traefik
+
 cd crowdsecurity-udpflood-traefik
+## TODO Faire echo nftables
 
 echo "🚀 Let's goooo ! 🚀"
