@@ -1,2 +1,5 @@
-openrc.sh
 tf-*
+openrc-*
+provider.tf
+.ssh/
+*.tf
