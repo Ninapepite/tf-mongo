@@ -32,8 +32,8 @@ services:
       - --accessLog.filePath=/var/log/crowdsec/traefik.log
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
       - --accessLog.filters.statusCodes=204-299,400-499,500-59
-      # - --entrypoints.web.address=:80
-      # - --entrypoints.websecure.address=:443
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
       - --certificatesresolvers.prodresolver.acme.email=killian.stein@icloud.com
       - --certificatesresolvers.prodresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.prodresolver.acme.keytype=RSA4096
@@ -50,14 +50,14 @@ services:
       - proxy
       - backend
     ports:
-      # - target: 80
-      #   published: 80
-      #   protocol: tcp
-      #   mode: host
-      # - target: 443
-      #   published: 443
-      #   protocol: tcp
-      #   mode: host
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
       - target: 27017
         published: 27017
         protocol: tcp
@@ -75,7 +75,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - ./data:/data
+      - ./data:/data/db
     networks:
       - backend
     expose:
