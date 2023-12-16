@@ -6,3 +6,5 @@ provider.tf
 .terraform
 .terraform*
 *.log
+test.yaml
+sc.yaml
