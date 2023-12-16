@@ -56,12 +56,11 @@ log_file="/home/debian/setup-init.log"
 
     # Setup Acquis Crowdsec
     acquis_traefik="
-    ---
-    filenames:
-      - /var/log/crowdsec/traefik-tcpudp.log
-    labels:
-      type: tcpudp-traefik"
-
+---
+filenames:
+  - /var/log/crowdsec/traefik-tcpudp.log
+labels:
+  type: tcpudp-traefik"
     # Chemin du fichier de configuration
     acquisFile="/opt/crowdsec/acquis.yaml"
 
