@@ -41,10 +41,16 @@ sudo sysctl -p
 
 sudo mkdir -p /opt/crowdsec
 
+sudo docker network create proxy
+sudo docker compose up -d
+
+echo 'nftables' | ./crowdsec-firewall-bouncer-linux-amd64/install.sh
+## TODO Faire echo nftables
+
 
 git clone https://github.com/aidalinfo/crowdsecurity-udpflood-traefik
 
-cd crowdsecurity-udpflood-traefik
-## TODO Faire echo nftables
+cp crowdsecurity-udpflood-traefik/parsers/s01-parse/parser-udp-flood.yaml /opt/crowdsec/parsers/s01-parse/
+cp crowdsecurity-udpflood-traefik/parsers/scenarios/sc-udp-flood.yaml /opt/crowdsec/scenarios/
 
 echo "🚀 Let's goooo ! 🚀"
