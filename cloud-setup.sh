@@ -50,7 +50,7 @@ echo 'nftables' | ./crowdsec-firewall-bouncer-linux-amd64/install.sh
 
 git clone https://github.com/aidalinfo/crowdsecurity-udpflood-traefik
 
-cp crowdsecurity-udpflood-traefik/parsers/s01-parse/parser-udp-flood.yaml /opt/crowdsec/parsers/s01-parse/
-cp crowdsecurity-udpflood-traefik/parsers/scenarios/sc-udp-flood.yaml /opt/crowdsec/scenarios/
+sudo cp crowdsecurity-udpflood-traefik/parsers/s01-parse/parser-udp-flood.yaml /opt/crowdsec/parsers/s01-parse/
+sudo cp crowdsecurity-udpflood-traefik/parsers/scenarios/sc-udp-flood.yaml /opt/crowdsec/scenarios/
 
 echo "🚀 Let's goooo ! 🚀"
