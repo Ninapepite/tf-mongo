@@ -8,3 +8,4 @@ provider.tf
 *.log
 test.yaml
 sc.yaml
+notifications.yaml

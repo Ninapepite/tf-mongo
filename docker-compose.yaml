@@ -7,7 +7,9 @@ services:
     container_name: crowdsec
     environment:
       PGID: "1000"
-      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/sshd"
+      COLLECTIONS: "crowdsecurity/traefik"
+      CUSTOM_NAME: "crowdsec"
+      BOUNCER_KEY_TRAEFIK: MLKDJHAGFZTyguhjdanbvcYHDJAHYFTDYAUHjk
     expose:
       - "8080"
     volumes:
@@ -19,12 +21,16 @@ services:
     restart: unless-stopped
     networks:
       - proxy
+    labels:
+      - "traefik.enable=false"
 
   traefik:
     restart: unless-stopped
     image: traefik:latest
     command:
-      - --providers.docker=true ## Logs for debugging
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - --log.filePath=/var/log/crowdsec/traefik-tcpudp.log
       - --log.level=DEBUG # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
       ## Logs for Crowdsec
@@ -44,8 +50,8 @@ services:
       # Static configuration
       - --entrypoints.tcp-mongo.address=:27017
       #  - --providers.file.filename=/etc/traefik/tls.yaml
-      # - "--experimental.plugins.bouncer.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-      # - "--experimental.plugins.bouncer.version=v1.1.13"
+      - "--experimental.plugins.bouncer.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      - "--experimental.plugins.bouncer.version=v1.1.16"
     networks:
       - proxy
       - backend
@@ -58,6 +64,10 @@ services:
         published: 443
         protocol: tcp
         mode: host
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
       - target: 27017
         published: 27017
         protocol: tcp
@@ -67,6 +77,8 @@ services:
       - "./letsencrypt:/letsencrypt"
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./tls.yaml:/etc/traefik/tls.yaml
+    depends_on:
+      - 'crowdsec'
 
   mongo:
     container_name: mongo
@@ -84,10 +96,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.tcp.routers.mongo-tcp.entrypoints=tcp-mongo
-      - traefik.tcp.routers.mongo-tcp.rule=HostSNI(`mongodb.ninapepite.ovh`)
+      - traefik.tcp.routers.mongo-tcp.rule=HostSNI(`m.ninapepite.ovh`)
       - traefik.tcp.routers.mongo-tcp.tls=true
       - traefik.tcp.routers.mongo-tcp.tls.certresolver=prodresolver
       - traefik.tcp.services.mongo-tcp.loadbalancer.server.port=27017
+      - "traefik.tcp.middlewares.crowdsec-mongo.plugin.bouncer.enabled=true"
+      # crowdseclapikey must be unique to the middleware attached to the service
+      - "traefik.tcp.middlewares.crowdsec-mongo.plugin.bouncer.crowdseclapikey=MLKDJHAGFZTyguhjdanbvcYHDJAHYFTDYAUHjk"
 
 networks:
   proxy:
