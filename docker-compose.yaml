@@ -9,6 +9,7 @@ services:
       PGID: "1000"
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/sshd"
       CUSTOM_NAME: "crowdsec"
+      BOUNCER_KEY_TRAEFIK: lmlkjhgyhujiKLK?NJBHGYUA
     expose:
       - "8080"
     volumes:
@@ -107,7 +108,7 @@ services:
       # Definitin of the middleware
       - "traefik.http.middlewares.crowdsec-mongo.plugin.crowdsec-bouncer-traefik-plugin.enabled=true"
       # crowdseclapikey must be unique to the middleware attached to the service
-      - "traefik.http.middlewares.crowdsec-mongo.plugin.crowdsec-bouncer-traefik-plugin.crowdseclapikey=hgfgBHJNHBGVCFGDHAUytvcyua9876bdnai"
+      - "traefik.http.middlewares.crowdsec-mongo.plugin.crowdsec-bouncer-traefik-plugin.crowdseclapikey=lmlkjhgyhujiKLK?NJBHGYUA"
 
 networks:
   proxy:
