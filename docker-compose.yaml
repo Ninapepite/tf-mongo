@@ -7,9 +7,8 @@ services:
     container_name: crowdsec
     environment:
       PGID: "1000"
-      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/sshd"
+      COLLECTIONS: "crowdsecurity/sshd"
       CUSTOM_NAME: "crowdsec"
-      BOUNCER_KEY_TRAEFIK: lmlkjhgyhujiKLK?NJBHGYUA
     expose:
       - "8080"
     volumes:
@@ -44,8 +43,6 @@ services:
       - --certificatesresolvers.prodresolver.acme.keytype=RSA4096
       - --certificatesresolvers.prodresolver.acme.tlschallenge=true
       - --certificatesresolvers.prodresolver.acme.storage=/letsencrypt/acme.json
-      - --experimental.plugins.crowdsec-bouncer-traefik-plugin.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-      - --experimental.plugins.crowdsec-bouncer-traefik-plugin.version=v1.1.16
       - --entrypoints.tcp-mongo.address=:27017
       - --entrypoints.udp-mongo.address=:21116
     networks:
@@ -94,21 +91,15 @@ services:
     labels:
       - traefik.enable=true
       - traefik.tcp.routers.mongo-tcp.entrypoints=tcp-mongo
-      - traefik.tcp.routers.mongo-tcp.rule=HostSNI(`mongosh.civit.fr`)
+      - traefik.tcp.routers.mongo-tcp.rule=HostSNI(`mongosh.civ-it.fr`)
       - traefik.tcp.routers.mongo-tcp.tls=true
       - traefik.tcp.routers.mongo-tcp.tls.certresolver=prodresolver
       - traefik.tcp.services.mongo-tcp.loadbalancer.server.port=27017
-      - traefik.tcp.routers.mongo-tcp.middlewares=crowdsec-mongo
       - traefik.udp.routers.mongo-udp.entrypoints=udp-mongo
       - traefik.udp.routers.mongo-udp.rule=HostSNI(`*`)
       - traefik.udp.routers.mongo-udp.tls=true
       - traefik.udp.routers.mongo-udp.tls.certresolver=prodresolver
       - traefik.udp.services.mongo-udp.loadbalancer.server.port=21116
-      - traefik.udp.routers.mongo-udp.middlewares=crowdsec-mongo
-      # Definitin of the middleware
-      - "traefik.http.middlewares.crowdsec-mongo.plugin.crowdsec-bouncer-traefik-plugin.enabled=true"
-      # crowdseclapikey must be unique to the middleware attached to the service
-      - "traefik.http.middlewares.crowdsec-mongo.plugin.crowdsec-bouncer-traefik-plugin.crowdseclapikey=lmlkjhgyhujiKLK?NJBHGYUA"
 
 networks:
   proxy:
